@@ -6,7 +6,11 @@
           {{ visitor.firstName }} {{ visitor.lastName }}
         </div>
         <div class="visitor-iin">ИИН: {{ visitor.iin }}</div>
-        <div class="visitor-phone">{{ visitor.phoneNumber }}</div>
+        <div class="visitor-phone">
+          <font-awesome-icon :icon="['fas', 'phone']" />{{
+            visitor.phoneNumber
+          }}
+        </div>
       </div>
       <div class="company-info">
         <div class="company-name">{{ visitor.company }}</div>
@@ -16,15 +20,29 @@
 
     <div class="visitor-id">ID: {{ visitor.id }}</div>
     <div class="visitor-type">{{ visitor.type }}</div>
-    <div class="last-login">Последний вход: {{ visitor.lastLogin }}</div>
-    <button class="delete-button" @click="deleteVisitor(visitor.id)">
-      Удалить карточку
-    </button>
+    <div class="last-login">
+      <font-awesome-icon :icon="['fas', 'clock']" class="clock-icon" />
+      {{ formatDateTime(visitor.lastLogin) }}
+    </div>
+    <div class="delete-icon" @click="deleteVisitor(visitor.id)">
+      <font-awesome-icon
+        :icon="['fas', 'trash-alt']"
+        class="delete-icon-style"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
+library.add(fas);
 export default {
+  components: {
+    FontAwesomeIcon,
+  },
   name: "VisitorCard",
   props: {
     visitor: {
@@ -35,6 +53,17 @@ export default {
   methods: {
     deleteVisitor(id) {
       this.$emit("delete", id);
+    },
+    formatDateTime(dateTime) {
+      const options = {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      };
+      return new Date(dateTime).toLocaleString("en-US", options);
     },
   },
 };
@@ -66,17 +95,25 @@ export default {
   flex-grow: 1;
   flex-basis: 20%;
   margin-right: 190px;
+  margin-left: 10px;
+
   color: rgb(255, 166, 0);
 }
 
 .visitor-name {
   font-weight: bold;
+  padding-top: 5px;
 }
 
 .visitor-iin,
 .visitor-phone {
+  padding-top: 5px;
   color: #666;
   white-space: nowrap;
+}
+
+.delete-icon {
+  color: red;
 }
 
 .company-info {
@@ -125,5 +162,9 @@ export default {
   cursor: pointer;
   flex-basis: 5%;
   margin-top: 10px;
+}
+
+.delete-icon:hover {
+  cursor: pointer;
 }
 </style>
