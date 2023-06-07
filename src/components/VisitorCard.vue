@@ -22,8 +22,9 @@
     <div class="visitor-type">{{ visitor.type }}</div>
     <div class="last-login">
       <font-awesome-icon :icon="['fas', 'clock']" class="clock-icon" />
-      {{ formatDateTime(visitor.lastLogin) }}
+      {{ formatDateTime(new Date().toISOString()) }}
     </div>
+
     <div class="delete-icon" @click="deleteVisitor(visitor.id)">
       <font-awesome-icon
         :icon="['fas', 'trash-alt']"
@@ -63,7 +64,7 @@ export default {
         month: "long",
         year: "numeric",
       };
-      return new Date(dateTime).toLocaleString("en-US", options);
+      return new Date().toLocaleString("en-US", options);
     },
   },
 };
@@ -103,6 +104,7 @@ export default {
 .visitor-name {
   font-weight: bold;
   padding-top: 5px;
+  white-space: nowrap;
 }
 
 .visitor-iin,
